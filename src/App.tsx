@@ -10,9 +10,11 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
+import { Provider } from 'react-redux'
 
 import Layout from './layout'
 import { routes } from './routes'
+import store from './store'
 
 const routeComponents = [
   ...routes.map(({ path, component }, key) => (
@@ -24,11 +26,13 @@ const routeComponents = [
 const App = () => {
   return (
     <>
-      <Router>
-        <Layout>
-          <Switch>{routeComponents}</Switch>
-        </Layout>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <Layout>
+            <Switch>{routeComponents}</Switch>
+          </Layout>
+        </Router>
+      </Provider>
     </>
   )
 }
