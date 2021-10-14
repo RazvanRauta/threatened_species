@@ -26,15 +26,20 @@ export interface IGetRegionsListResponse {
   error?: string
 }
 
+export interface ISpeciesByRegionParams {
+  region: string
+  pageNumber?: number
+}
+
 export interface IGetSpeciesByRegionResponse {
   count: number
   region_identifier: string
   page: string
   error?: string
-  result: Specimen[]
+  result: ISpecimen[]
 }
 
-export interface Specimen {
+export interface ISpecimen {
   taxonid: number
   kingdom_name: KingdomName
   phylum_name: PhylumName
@@ -49,6 +54,7 @@ export interface Specimen {
   population: null
   category: Category
   main_common_name: null | string
+  conservation_measures?: null | string
 }
 
 export enum Category {
@@ -108,4 +114,16 @@ export enum PhylumName {
   Marchantiophyta = 'MARCHANTIOPHYTA',
   Mollusca = 'MOLLUSCA',
   Tracheophyta = 'TRACHEOPHYTA',
+}
+
+export interface IConservationMeasure {
+  code: string
+  title: string
+}
+
+export interface IGetConservationMeasuresResponse {
+  name: string
+  region_identifier: string
+  result: IConservationMeasure[]
+  error?: string
 }

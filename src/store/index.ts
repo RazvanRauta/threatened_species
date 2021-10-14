@@ -6,10 +6,12 @@
 
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import regionsReducer from './red-list/regionsSlice'
+import speciesReducer from './red-list/speciesSlice'
 
 const store = configureStore({
   reducer: {
     regions: regionsReducer,
+    species: speciesReducer,
   },
 })
 
