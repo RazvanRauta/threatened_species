@@ -1,3 +1,9 @@
+/**
+ * @ @author: Razvan Rauta
+ * @ Date: Oct 13 2021
+ * @ Time: 19:24
+ */
+
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
 abstract class HttpClient {

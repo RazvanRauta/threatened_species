@@ -1,3 +1,9 @@
+/**
+ * @ @author: Razvan Rauta
+ * @ Date: Oct 14 2021
+ * @ Time: 13:48
+ */
+
 import IndexPage from '@/pages/IndexPage'
 import { Routes } from '@/types'
 

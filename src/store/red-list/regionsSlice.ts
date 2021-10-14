@@ -1,3 +1,9 @@
+/**
+ * @ @author: Razvan Rauta
+ * @ Date: Oct 14 2021
+ * @ Time: 16:49
+ */
+
 import RedListApi from '@/api/red-list-api'
 import type { IRegion } from '@/types'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
