@@ -9,3 +9,13 @@ export interface IRoute {
 
 export type Routes = IRoute[]
 
+export interface IRegion {
+  name: string
+  identifier: string
+}
+
+export interface IGetRegionsListResponse {
+  count: number
+  results: IRegion[]
+  error?: string
+}
