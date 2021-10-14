@@ -4,7 +4,7 @@
  *  Time: 17:44
  */
 
-import { IRegion } from '@/types'
+import type { IRegion } from '@/types'
 import {
   Box,
   Card,
@@ -12,9 +12,10 @@ import {
   Button,
   CardHeader,
   CardMedia,
-  Theme,
 } from '@mui/material'
+import { Theme } from '@mui/material/styles'
 import lowerCase from 'lodash/lowerCase'
+import { Link } from 'react-router-dom'
 
 import Africa from '@/assets/images/africa.svg'
 import Global from '@/assets/images/global.svg'
@@ -68,7 +69,12 @@ const RegionCard = ({ name, identifier }: Props) => {
           }}
         />
         <CardActions>
-          <Button color='secondary' size='small'>
+          <Button
+            component={Link}
+            to={`/species/${identifier}`}
+            color='secondary'
+            size='small'
+          >
             See species
           </Button>
         </CardActions>

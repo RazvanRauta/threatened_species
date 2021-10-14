@@ -4,7 +4,11 @@
  * @ Time: 19:27
  */
 
-import { IGetRegionsListResponse, IGetSpeciesByRegionResponse } from '@/types'
+import type {
+  IGetConservationMeasuresResponse,
+  IGetRegionsListResponse,
+  IGetSpeciesByRegionResponse,
+} from '@/types'
 import HttpClient from './http-client'
 
 class RedListApi extends HttpClient {
@@ -20,7 +24,12 @@ class RedListApi extends HttpClient {
 
   public getSpeciesByRegion = (region: string, pageNumber: number = 0) =>
     this.instance.get<IGetSpeciesByRegionResponse>(
-      `/species/region/${region}page/${pageNumber}`
+      `/species/region/${region}/page/${pageNumber}`
+    )
+
+  public getConservationMeasuresByIdAndRegion = (id: number, region: string) =>
+    this.instance.get<IGetConservationMeasuresResponse>(
+      `measures/species/id/${id}/region/${region}`
     )
 }
 
