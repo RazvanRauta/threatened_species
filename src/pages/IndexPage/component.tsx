@@ -1,8 +1,7 @@
 import Loader from '@/components/Loader'
 import RegionCard from '@/components/RegionCard'
 import Snackbar from '@/components/Snackbar'
-import { useAppDispatch, useAppSelector } from '@/hooks'
-import { fetchRegionsAsync } from '@/store/red-list/regionsSlice'
+import { useAppSelector } from '@/hooks'
 import { Grid } from '@mui/material'
 import sortBy from 'lodash/sortBy'
 import { useEffect, useState } from 'react'
@@ -12,15 +11,6 @@ interface Props {}
 const IndexPageComponent = (props: Props) => {
   const [showSnackbar, setShowSnackbar] = useState(false)
   const { status, error, regions } = useAppSelector((state) => state.regions)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    const promise = dispatch(fetchRegionsAsync())
-    return () => {
-      promise.abort()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     if ((status === 'failed' && error) || !!error) {

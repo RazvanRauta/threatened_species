@@ -6,12 +6,16 @@ import { ThemeProvider } from '@mui/material/styles'
 import App from './App'
 import theme from './theme'
 import './index.css'
+import { Provider } from 'react-redux'
+import store from './store'
 
 ReactDOM.render(
   <React.Fragment>
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
+      <Provider store={store}>
+        <CssBaseline />
+        <App />
+      </Provider>
     </ThemeProvider>
   </React.Fragment>,
   document.querySelector('#root')

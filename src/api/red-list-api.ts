@@ -9,6 +9,7 @@ import type {
   IGetRegionsListResponse,
   IGetSpeciesByRegionResponse,
 } from '@/types'
+import { CancelToken } from 'axios'
 import HttpClient from './http-client'
 
 class RedListApi extends HttpClient {
@@ -27,9 +28,14 @@ class RedListApi extends HttpClient {
       `/species/region/${region}/page/${pageNumber}`
     )
 
-  public getConservationMeasuresByIdAndRegion = (id: number, region: string) =>
+  public getConservationMeasuresByIdAndRegion = (
+    id: number,
+    region: string,
+    cancelToken?: CancelToken
+  ) =>
     this.instance.get<IGetConservationMeasuresResponse>(
-      `measures/species/id/${id}/region/${region}`
+      `measures/species/id/${id}/region/${region}`,
+      { cancelToken }
     )
 }
 

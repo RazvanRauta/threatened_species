@@ -31,6 +31,11 @@ export interface ISpeciesByRegionParams {
   pageNumber?: number
 }
 
+export interface IConservationMeasuresParams {
+  region: string
+  taxonid: number
+}
+
 export interface IGetSpeciesByRegionResponse {
   count: number
   region_identifier: string
@@ -126,4 +131,8 @@ export interface IGetConservationMeasuresResponse {
   region_identifier: string
   result: IConservationMeasure[]
   error?: string
+}
+export interface IWindowSize {
+  width: number | undefined
+  height: number | undefined
 }
