@@ -68,7 +68,14 @@ const RegionCard = ({ name, identifier }: Props) => {
             },
           }}
         />
-        <CardActions>
+        <CardActions
+          sx={{
+            display: 'flex',
+            flexFlow: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Button
             component={Link}
             to={`/species/${identifier}`}
@@ -76,6 +83,14 @@ const RegionCard = ({ name, identifier }: Props) => {
             size='small'
           >
             See species
+          </Button>
+          <Button
+            component={Link}
+            to={`/species/${identifier}?CR`}
+            color='secondary'
+            size='small'
+          >
+            See Endangered
           </Button>
         </CardActions>
       </Card>

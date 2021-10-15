@@ -7,7 +7,7 @@ const Main: React.FC = ({ children }) => {
       component='main'
       maxWidth='lg'
       sx={{
-        marginTop: (theme: Theme) => theme.spacing(8),
+        marginTop: (theme: Theme) => theme.spacing(4),
         marginBottom: (theme: Theme) => theme.spacing(2),
       }}
     >

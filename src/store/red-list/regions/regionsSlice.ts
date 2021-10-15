@@ -4,9 +4,9 @@
  * @ Time: 16:49
  */
 
-import RedListApi from '@/api/red-list-api'
 import type { IRegion } from '@/types'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { fetchRegionsAsync } from './actions'
 
 export interface IRegionsState {
   regions: IRegion[] | []
@@ -22,15 +22,6 @@ const initialState: IRegionsState = {
   count: null,
 }
 
-export const fetchRegionsAsync = createAsyncThunk(
-  'regions/fetchRegions',
-  async () => {
-    const redListApi = new RedListApi()
-    const response = await redListApi.getRegionsList()
-    return response.data
-  }
-)
-
 const regionsSlice = createSlice({
   name: 'regions',
   initialState,
@@ -42,22 +33,30 @@ const regionsSlice = createSlice({
       })
       .addCase(fetchRegionsAsync.fulfilled, (state, { payload }) => {
         if (payload.error) {
-          state.status = 'failed'
-          state.error = payload.error
-          state.regions = []
-          state.count = 0
-          return state
+          return {
+            ...state,
+            status: 'failed',
+            error: payload.error,
+            regions: [],
+            count: 0,
+          }
         }
-        state.status = 'idle'
-        state.error = null
-        state.regions = payload.results
-        state.count = payload.count
+        return {
+          ...state,
+          status: 'idle',
+          error: null,
+          regions: payload.results,
+          count: payload.count,
+        }
       })
       .addCase(fetchRegionsAsync.rejected, (state, { error }) => {
-        state.status = 'failed'
-        state.error = error?.message ?? 'Unknown error'
-        state.regions = []
-        state.count = 0
+        return {
+          ...state,
+          status: 'failed',
+          error: error?.message ?? 'Unknown error',
+          regions: [],
+          count: 0,
+        }
       })
   },
 })
