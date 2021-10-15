@@ -15,6 +15,7 @@ import {
 import memoize from 'memoize-one'
 import InfiniteLoader from 'react-window-infinite-loader'
 import RowComponent from '../RowComponent'
+import { useWindowSize } from '@/hooks'
 
 const Row = memo(({ data, index, style }: ListChildComponentProps) => {
   const { species, region, showCriticalEndangered } = data
@@ -54,10 +55,10 @@ const ListComponent = ({
   hasMoreResults,
   showCriticalEndangered,
 }: ListComponentProps) => {
-  const itemCount = hasMoreResults ? species.length + 1 : species.length
-
+  const { height = 0, width = 0 } = useWindowSize()
   const { region } = useParams<{ region?: string }>()
 
+  const itemCount = hasMoreResults ? species.length + 1 : species.length
   const itemData = createItemData(species, region, showCriticalEndangered)
 
   return (
@@ -68,10 +69,10 @@ const ListComponent = ({
     >
       {({ onItemsRendered, ref }) => (
         <List
-          height={650}
-          width={1200}
+          height={width < 768 ? height - 300 : height - 250}
+          width={Math.min(1200, Math.max(320, width - 100))}
           itemCount={itemCount}
-          itemSize={250}
+          itemSize={320}
           itemData={itemData}
           onItemsRendered={onItemsRendered}
           ref={ref}

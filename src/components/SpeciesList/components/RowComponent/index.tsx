@@ -142,9 +142,21 @@ const RowComponent = ({
           marginRight: 'auto',
           marginLeft: 'auto',
           paddingTop: '10px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Card variant='elevation' elevation={5}>
+        <Card
+          variant='elevation'
+          elevation={5}
+          sx={{
+            width: '100%',
+            '@media screen and (max-width: 480px)': {
+              width: 300,
+            },
+          }}
+        >
           <CardHeader title={specimen.scientific_name} />
           <CardContent>
             <TableContainer component={Paper}>
@@ -157,7 +169,7 @@ const RowComponent = ({
                     <TableCell align='right'>Class</TableCell>
                     <TableCell align='right'>Order</TableCell>
                     <TableCell align='right'>Category</TableCell>
-                    <TableCell align='right'>Family_name</TableCell>
+                    <TableCell align='right'>Family</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -176,12 +188,24 @@ const RowComponent = ({
               </Table>
             </TableContainer>
             {isEndangered && (
-              <Box>
-                <Typography>Conservation Measures</Typography>
+              <Box py='5px'>
+                <Typography variant='h6' gutterBottom>
+                  Conservation Measures:
+                </Typography>
                 {loadingMeasurers ? (
                   <CircularProgress />
                 ) : (
-                  <Typography>{measurersData[specimen.taxonid]}</Typography>
+                  <Typography
+                    sx={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {measurersData[specimen.taxonid]}
+                  </Typography>
                 )}
               </Box>
             )}

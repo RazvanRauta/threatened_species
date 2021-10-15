@@ -132,3 +132,7 @@ export interface IGetConservationMeasuresResponse {
   result: IConservationMeasure[]
   error?: string
 }
+export interface IWindowSize {
+  width: number | undefined
+  height: number | undefined
+}

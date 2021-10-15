@@ -27,7 +27,12 @@ const SpeciesList = ({ species, showCriticalEndangered }: SpeciesListProps) => {
   return (
     <>
       {currentRegionName && (
-        <Typography gutterBottom variant='h5'>{`All ${
+        <Typography
+          variant='h5'
+          sx={{
+            marginBottom: '20px',
+          }}
+        >{`All ${
           showCriticalEndangered ? 'Critical Endangered' : ''
         } species from ${currentRegionName}`}</Typography>
       )}
