@@ -136,3 +136,15 @@ export interface IWindowSize {
   width: number | undefined
   height: number | undefined
 }
+
+export interface IGetCommonNamesResponse {
+  name: string
+  result: CommonSpecimenName[]
+  error?: string
+}
+
+export interface CommonSpecimenName {
+  taxonname: string
+  primary: boolean
+  language: string
+}
