@@ -5,44 +5,15 @@
  */
 
 import { ISpecimen } from '@/types'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CircularProgress,
-  Box,
-  Typography,
-} from '@mui/material'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
+import { Card, CardHeader, Box, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
 
 import RedListApi from '@/api/red-list-api'
 import axios, { CancelToken } from 'axios'
 import { useLocalStorage } from '@/hooks'
-
-const Loader = ({ style }: { style: React.CSSProperties }) => (
-  <div style={style}>
-    <Box
-      sx={{
-        maxWidth: 400,
-        marginRight: 'auto',
-        marginLeft: 'auto',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <CircularProgress size='50px' />
-    </Box>
-  </div>
-)
+import ListLoader from '../ListLoader'
+import SpecimenDetails from '../SpecimenDetails'
 
 interface RowComponentProps {
   style: React.CSSProperties
@@ -65,6 +36,8 @@ const RowComponent = ({
     '{}'
   )
   const measurersData = JSON.parse(measurers)
+
+  const isMobile = useMediaQuery('(max-width:600px)')
 
   useEffect(() => {
     const CancelToken = axios.CancelToken
@@ -133,12 +106,12 @@ const RowComponent = ({
   }
 
   return loading ? (
-    <Loader style={style} />
+    <ListLoader style={style} />
   ) : (
     <div style={style}>
       <Box
         sx={{
-          maxWidth: 1100,
+          maxWidth: 1000,
           marginRight: 'auto',
           marginLeft: 'auto',
           paddingTop: '10px',
@@ -157,59 +130,20 @@ const RowComponent = ({
             },
           }}
         >
-          <CardHeader title={specimen.scientific_name} />
-          <CardContent>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align='right'>Taxonid</TableCell>
-                    <TableCell align='right'>Kingdom</TableCell>
-                    <TableCell align='right'>Phylum</TableCell>
-                    <TableCell align='right'>Class</TableCell>
-                    <TableCell align='right'>Order</TableCell>
-                    <TableCell align='right'>Category</TableCell>
-                    <TableCell align='right'>Family</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell align='right'>{specimen.taxonid}</TableCell>
-                    <TableCell align='right'>{specimen.kingdom_name}</TableCell>
-                    <TableCell align='right'>{specimen.phylum_name}</TableCell>
-                    <TableCell align='right'>{specimen.class_name}</TableCell>
-                    <TableCell align='right'>{specimen.order_name}</TableCell>
-                    <TableCell align='right'>{specimen.category}</TableCell>
-                    <TableCell align='right'>{specimen.family_name}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {isEndangered && (
-              <Box py='5px'>
-                <Typography variant='h6' gutterBottom>
-                  Conservation Measures:
-                </Typography>
-                {loadingMeasurers ? (
-                  <CircularProgress />
-                ) : (
-                  <Typography
-                    sx={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    {measurersData[specimen.taxonid]}
-                  </Typography>
-                )}
-              </Box>
-            )}
-          </CardContent>
+          <CardHeader
+            title={specimen.scientific_name}
+            subheader='Scientific Name'
+            sx={{
+              padding: isMobile ? '10px 10px 0' : '16px',
+            }}
+          />
+          <SpecimenDetails
+            isEndangered={isEndangered}
+            loadingMeasurers={loadingMeasurers}
+            specimen={specimen}
+            conservationMeasurers={measurersData[specimen.taxonid]}
+            isMobile={isMobile}
+          />
         </Card>
       </Box>
     </div>

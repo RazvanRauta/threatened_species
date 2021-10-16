@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardMedia,
 } from '@mui/material'
-import { Theme } from '@mui/material/styles'
+import { Theme, styled } from '@mui/material/styles'
 import lowerCase from 'lodash/lowerCase'
 import { Link } from 'react-router-dom'
 
@@ -21,6 +21,13 @@ import Africa from '@/assets/images/africa.svg'
 import Global from '@/assets/images/global.svg'
 import Europe from '@/assets/images/europe.svg'
 import Asia from '@/assets/images/asia.svg'
+
+const StyledLink = styled(Link)`
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+`
 
 interface Props extends IRegion {}
 
@@ -56,43 +63,32 @@ const RegionCard = ({ name, identifier }: Props) => {
           },
         }}
       >
-        <CardHeader title={name} />
-        <CardMedia
-          component='img'
-          height='100'
-          alt={name}
-          image={imageSrc}
-          sx={{
-            '&.MuiCardMedia-img': {
-              objectFit: 'unset',
-            },
-          }}
-        />
-        <CardActions
-          sx={{
-            display: 'flex',
-            flexFlow: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Button
-            component={Link}
-            to={`/species/${identifier}`}
-            color='secondary'
-            size='small'
+        <StyledLink to={`/species/${identifier}`}>
+          <CardHeader title={name} />
+          <CardMedia
+            component='img'
+            height='100'
+            alt={name}
+            image={imageSrc}
+            sx={{
+              '&.MuiCardMedia-img': {
+                objectFit: 'unset',
+              },
+            }}
+          />
+          <CardActions
+            sx={{
+              display: 'flex',
+              flexFlow: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
-            See species
-          </Button>
-          <Button
-            component={Link}
-            to={`/species/${identifier}?CR`}
-            color='secondary'
-            size='small'
-          >
-            See Endangered
-          </Button>
-        </CardActions>
+            <Button color='secondary' size='small'>
+              See all species
+            </Button>
+          </CardActions>
+        </StyledLink>
       </Card>
     </Box>
   )
