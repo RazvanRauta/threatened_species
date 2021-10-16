@@ -5,48 +5,20 @@
  */
 
 import type { ISpecimen } from '@/types'
-import { memo } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  areEqual,
-  FixedSizeList as List,
-  ListChildComponentProps,
-} from 'react-window'
-import memoize from 'memoize-one'
+import { FixedSizeList as List } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
-import RowComponent from '../RowComponent'
 import { useWindowSize } from '@/hooks'
-
-const Row = memo(({ data, index, style }: ListChildComponentProps) => {
-  const { species, region, showCriticalEndangered } = data
-  return (
-    <RowComponent
-      specimen={species[index]}
-      style={style}
-      loading={index === species.length}
-      region={region}
-      isEndangered={showCriticalEndangered}
-    />
-  )
-}, areEqual)
-
-const createItemData = memoize(
-  (
-    species: ISpecimen[],
-    region: string | undefined,
-    showCriticalEndangered: boolean
-  ) => ({
-    species,
-    region,
-    showCriticalEndangered,
-  })
-)
+import Row from '../Row'
+import { createItemData } from '../../utils'
+import { useMediaQuery } from '@mui/material'
 
 interface ListComponentProps {
   species: ISpecimen[]
   loadMore: () => void
   hasMoreResults: boolean
-  showCriticalEndangered: boolean
+  showCriticalEndangered?: boolean
+  defaultRowHeight?: boolean
 }
 
 const ListComponent = ({
@@ -54,9 +26,11 @@ const ListComponent = ({
   loadMore,
   hasMoreResults,
   showCriticalEndangered,
+  defaultRowHeight,
 }: ListComponentProps) => {
   const { height = 0, width = 0 } = useWindowSize()
   const { region } = useParams<{ region?: string }>()
+  const isMobile = useMediaQuery('(max-width:600px)')
 
   const itemCount = hasMoreResults ? species.length + 1 : species.length
   const itemData = createItemData(species, region, showCriticalEndangered)
@@ -70,9 +44,17 @@ const ListComponent = ({
       {({ onItemsRendered, ref }) => (
         <List
           height={width < 768 ? height - 300 : height - 250}
-          width={Math.min(1200, Math.max(320, width - 100))}
+          width={Math.min(1100, Math.max(320, width - 100))}
           itemCount={itemCount}
-          itemSize={320}
+          itemSize={
+            isMobile
+              ? showCriticalEndangered
+                ? 520
+                : 450
+              : defaultRowHeight
+              ? 250
+              : 320
+          }
           itemData={itemData}
           onItemsRendered={onItemsRendered}
           ref={ref}

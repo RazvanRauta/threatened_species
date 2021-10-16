@@ -1,3 +1,9 @@
+/**
+ *  @author: Razvan Rauta
+ *  Date: Oct 16 2021
+ *  Time: 17:04
+ */
+
 import Loader from '@/components/Loader'
 import Snackbar from '@/components/Snackbar'
 import SpeciesList from '@/components/SpeciesList'
@@ -5,20 +11,16 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { HOME_ROUTE } from '@/routes'
 import { fetchSpeciesByRegion } from '@/store/red-list/species/actions'
 import { useEffect, useState } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 const RegionsSpeciesComponent = () => {
   const [showSnackbar, setShowSnackbar] = useState(false)
-  const { status, error, species, criticalEndangeredSpecies } = useAppSelector(
-    (state) => state.species
-  )
+  const { status, error, species, criticalEndangeredSpecies, mammalSpecies } =
+    useAppSelector((state) => state.species)
   const dispatch = useAppDispatch()
 
   const history = useHistory()
   const params = useParams<{ region?: string }>()
-  const { search } = useLocation()
-
-  const showCriticalEndangered = Boolean(search && search.indexOf('CR') > -1)
 
   useEffect(() => {
     const { region } = params
@@ -43,8 +45,9 @@ const RegionsSpeciesComponent = () => {
         <Loader />
       ) : species ? (
         <SpeciesList
-          showCriticalEndangered={showCriticalEndangered}
-          species={showCriticalEndangered ? criticalEndangeredSpecies : species}
+          species={species}
+          criticalEndangeredSpecies={criticalEndangeredSpecies}
+          mammalSpecies={mammalSpecies}
         />
       ) : null}
       <Snackbar

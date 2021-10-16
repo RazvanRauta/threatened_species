@@ -1,4 +1,9 @@
-import theme from '@/theme'
+/**
+ *  @author: Razvan Rauta
+ *  Date: Oct 16 2021
+ *  Time: 17:04
+ */
+
 import { Container, Box } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 
@@ -12,7 +17,10 @@ const Footer = () => {
         padding: (theme: Theme) => theme.spacing(3, 2),
         textAlign: 'center',
         marginTop: 'auto',
-        background: theme.palette.primary.main,
+        background: (theme: Theme) => theme.palette.primary.main,
+        '@media screen and (max-width: 600px)': {
+          padding: (theme: Theme) => theme.spacing(1),
+        },
       }}
     >
       <Container maxWidth='sm'>
