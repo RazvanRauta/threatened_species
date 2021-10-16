@@ -27,9 +27,11 @@ const Row = memo(({ data, index, style }: ListChildComponentProps) => {
         width: '100%',
         height: '100%',
         p: '20px',
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
-      <Typography variant='h4'>No results in this category</Typography>
+      <Typography variant='h4'>No results in this category 😓</Typography>
     </Box>
   )
 }, areEqual)

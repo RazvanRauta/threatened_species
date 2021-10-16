@@ -43,7 +43,7 @@ const ListComponent = ({
     >
       {({ onItemsRendered, ref }) => (
         <List
-          height={width < 768 ? height - 300 : height - 250}
+          height={width < 768 ? height - 200 : height - 250}
           width={Math.min(1100, Math.max(320, width - 100))}
           itemCount={itemCount}
           itemSize={
