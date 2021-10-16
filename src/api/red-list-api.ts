@@ -5,6 +5,7 @@
  */
 
 import type {
+  IGetCommonNamesResponse,
   IGetConservationMeasuresResponse,
   IGetRegionsListResponse,
   IGetSpeciesByRegionResponse,
@@ -35,6 +36,12 @@ class RedListApi extends HttpClient {
   ) =>
     this.instance.get<IGetConservationMeasuresResponse>(
       `measures/species/id/${id}/region/${region}`,
+      { cancelToken }
+    )
+
+  public getCommonNameByName = (name: string, cancelToken?: CancelToken) =>
+    this.instance.get<IGetCommonNamesResponse>(
+      `/species/common_names/${name}`,
       { cancelToken }
     )
 }

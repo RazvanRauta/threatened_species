@@ -44,13 +44,13 @@ const ListComponent = ({
       {({ onItemsRendered, ref }) => (
         <List
           height={width < 768 ? height - 200 : height - 250}
-          width={Math.min(1100, Math.max(320, width - 100))}
+          width={Math.min(1100, Math.max(340, width - 100))}
           itemCount={itemCount}
           itemSize={
             isMobile
               ? showCriticalEndangered
                 ? 520
-                : 450
+                : 470
               : defaultRowHeight
               ? 250
               : 320
