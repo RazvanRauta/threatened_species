@@ -4,10 +4,10 @@
  *  Time: 17:04
  */
 
-import { Container, Box } from '@mui/material'
-import { Theme } from '@mui/material/styles'
+import { Box, Container } from '@mui/material'
 
 import Copyright from '../Copyright'
+import { Theme } from '@mui/material/styles'
 
 const Footer = () => {
   return (

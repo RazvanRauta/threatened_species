@@ -4,10 +4,9 @@
  *  Time: 18:10
  */
 
-import React from 'react'
-import MuiSnackbar from '@mui/material/Snackbar'
-
 import Alert from '../Alert'
+import MuiSnackbar from '@mui/material/Snackbar'
+import React from 'react'
 
 interface SnackbarProps {
   severity: 'error' | 'warning' | 'info' | 'success'

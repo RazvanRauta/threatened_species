@@ -4,8 +4,8 @@
  *  Time: 19:17
  */
 
-import type { ISpecimen } from '@/types'
 import DesktopComponent from './DesktopComponent'
+import type { ISpecimen } from '@/types'
 import MobilesComponent from './MobilesComponent'
 
 export interface SpecimenDetailsProps {

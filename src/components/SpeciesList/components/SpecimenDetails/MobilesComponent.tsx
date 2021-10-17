@@ -6,15 +6,15 @@
 
 import {
   CardContent,
+  CircularProgress,
   List,
   ListItem,
   ListItemText,
-  CircularProgress,
   Typography,
 } from '@mui/material'
-import { styled } from '@mui/material/styles'
 
 import type { SpecimenDetailsProps } from './index'
+import { styled } from '@mui/material/styles'
 
 const StyledContent = styled(CardContent)`
   padding-top: 5px;

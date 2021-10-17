@@ -4,24 +4,24 @@
  *  Time: 10:17
  */
 
-import { ISpecimen } from '@/types'
 import {
+  Box,
   Card,
   CardHeader,
-  Box,
-  useMediaQuery,
-  IconButton,
   CircularProgress,
+  IconButton,
+  useMediaQuery,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import isEmpty from 'lodash/isEmpty'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-
-import RedListApi from '@/api/red-list-api'
 import axios, { CancelToken } from 'axios'
-import { useLocalStorage } from '@/hooks'
+
+import { ISpecimen } from '@/types'
 import ListLoader from '../ListLoader'
+import RedListApi from '@/api/red-list-api'
 import SpecimenDetails from '../SpecimenDetails'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import isEmpty from 'lodash/isEmpty'
+import { useLocalStorage } from '@/hooks'
 
 interface RowComponentProps {
   style: React.CSSProperties
@@ -125,7 +125,7 @@ const RowComponent = ({
   }
 
   const loadCommonName = async (cancelToken: CancelToken) => {
-    const defaultName = 'Scientific name only'
+    const defaultName = 'Scientific name'
     if (specimen) {
       setIsLoadingName(true)
       const redListApi = new RedListApi()
