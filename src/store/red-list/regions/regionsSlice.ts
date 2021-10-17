@@ -15,7 +15,7 @@ export interface IRegionsState {
   count: number | null
 }
 
-const initialState: IRegionsState = {
+export const initialState: IRegionsState = {
   regions: [],
   status: 'idle',
   error: null,

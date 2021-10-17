@@ -12,7 +12,15 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
 ) {
-  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
+  return (
+    <MuiAlert
+      elevation={6}
+      ref={ref}
+      variant='filled'
+      data-testid='snack-bar-alert'
+      {...props}
+    />
+  )
 })
 
 export default Alert

@@ -4,8 +4,9 @@
  * @ Time: 16:16
  */
 
-import RedListApi from '@/api/red-list-api'
 import { Category, ClassName, ISpeciesByRegionParams, ISpecimen } from '@/types'
+
+import RedListApi from '@/api/red-list-api'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 export const fetchSpeciesByRegionAsync = createAsyncThunk(
@@ -36,10 +37,14 @@ export const fetchSpeciesByRegionAsync = createAsyncThunk(
       }
 
       throw new Error('No results were found')
-    } catch (err: any) {
-      console.log(err)
+    } catch (error: any) {
+      const errorMessage =
+        error.message ?? 'Error while trying to fetch regions list'
+
+      console.log(errorMessage)
+
       return {
-        error: err.message,
+        error: errorMessage,
         result: [],
         criticalEndangeredSpecies: [],
         mammalSpecies: [],

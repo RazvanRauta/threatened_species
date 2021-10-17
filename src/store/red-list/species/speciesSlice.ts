@@ -4,10 +4,9 @@
  * @ Time: 22:29
  */
 
-import { createSlice } from '@reduxjs/toolkit'
-
-import { fetchSpeciesByRegionAsync } from './actions'
 import type { ISpecimen } from '@/types'
+import { createSlice } from '@reduxjs/toolkit'
+import { fetchSpeciesByRegionAsync } from './actions'
 
 export interface ISpeciesState {
   species: ISpecimen[]
@@ -17,7 +16,7 @@ export interface ISpeciesState {
   error: string | null
 }
 
-const initialState: ISpeciesState = {
+export const initialState: ISpeciesState = {
   species: [],
   criticalEndangeredSpecies: [],
   mammalSpecies: [],

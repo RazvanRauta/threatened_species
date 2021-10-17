@@ -18,8 +18,21 @@ export const fetchRegionsAsync = createAsyncThunk<
   'regions/fetchRegions',
   async () => {
     const redListApi = new RedListApi()
-    const response = await redListApi.getRegionsList()
-    return response.data
+    try {
+      const response = await redListApi.getRegionsList()
+      return response.data
+    } catch (error: any) {
+      const errorMessage =
+        error.message ?? 'Error while trying to fetch regions list'
+
+      console.log(errorMessage)
+
+      return {
+        count: 0,
+        results: [],
+        error: errorMessage,
+      }
+    }
   },
   {
     condition: (_, { getState }) => {
