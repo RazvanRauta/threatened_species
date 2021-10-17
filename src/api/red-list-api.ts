@@ -14,6 +14,11 @@ import type {
 import { CancelToken } from 'axios'
 import HttpClient from './http-client'
 
+export const REGIONS_LIST_PATH = '/region/list'
+export const SPECIES_BY_REGION_PATH = '/species/region/'
+export const MEASURES_BY_ID_PATH = '/measures/species/id/'
+export const COMMON_NAME_PATH = '/species/common_names/'
+
 class RedListApi extends HttpClient {
   public constructor() {
     super(
@@ -23,11 +28,11 @@ class RedListApi extends HttpClient {
   }
 
   public getRegionsList = () =>
-    this.instance.get<IGetRegionsListResponse>('/region/list')
+    this.instance.get<IGetRegionsListResponse>(REGIONS_LIST_PATH)
 
   public getSpeciesByRegion = (region: string, pageNumber: number = 0) =>
     this.instance.get<IGetSpeciesByRegionResponse>(
-      `/species/region/${region}/page/${pageNumber}`
+      `${SPECIES_BY_REGION_PATH}${region}/page/${pageNumber}`
     )
 
   public getConservationMeasuresByIdAndRegion = (
@@ -36,15 +41,14 @@ class RedListApi extends HttpClient {
     cancelToken?: CancelToken
   ) =>
     this.instance.get<IGetConservationMeasuresResponse>(
-      `measures/species/id/${id}/region/${region}`,
+      `${MEASURES_BY_ID_PATH}${id}/region/${region}`,
       { cancelToken }
     )
 
   public getCommonNameByName = (name: string, cancelToken?: CancelToken) =>
-    this.instance.get<IGetCommonNamesResponse>(
-      `/species/common_names/${name}`,
-      { cancelToken }
-    )
+    this.instance.get<IGetCommonNamesResponse>(`${COMMON_NAME_PATH}${name}`, {
+      cancelToken,
+    })
 }
 
 export default RedListApi

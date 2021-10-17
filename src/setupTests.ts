@@ -2,4 +2,10 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'
+
+import '@testing-library/jest-dom/extend-expect'
+import 'mutationobserver-shim'
+import 'jest-localstorage-mock'
+
+process.env.REACT_APP_API_URL = 'http://mock-api'
+process.env.REACT_APP_API_TOKEN = 'mocked-token'
