@@ -2,6 +2,8 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/441ff614-29ad-4643-b73b-286106d9c284/deploy-status)](https://app.netlify.com/sites/red-list-rr/deploys)
 
+[![Continuous Integration](https://github.com/RazvanRauta/threatened_species/actions/workflows/main.yml/badge.svg)](https://github.com/RazvanRauta/threatened_species/actions/workflows/main.yml)
+
 ## Details
 
 React app that is using data provided by [The International Union for Conservation of Nature’s Red List of Threatened Species](https://www.iucnredlist.org/) to display the species that are threatened.
