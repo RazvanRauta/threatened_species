@@ -4,11 +4,10 @@
  * @ Time: 22:29
  */
 
-import type { ISpecimen } from '@/types'
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchSpeciesByRegion, fetchConservationMeasures } from './actions'
-import cloneDeep from 'lodash/cloneDeep'
-import isEmpty from 'lodash/isEmpty'
+
+import { fetchSpeciesByRegionAsync } from './actions'
+import type { ISpecimen } from '@/types'
 
 export interface ISpeciesState {
   species: ISpecimen[]
@@ -32,10 +31,10 @@ const speciesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSpeciesByRegion.pending, (state) => {
+      .addCase(fetchSpeciesByRegionAsync.pending, (state) => {
         state.status = 'loading'
       })
-      .addCase(fetchSpeciesByRegion.fulfilled, (state, { payload }) => {
+      .addCase(fetchSpeciesByRegionAsync.fulfilled, (state, { payload }) => {
         return {
           ...state,
           status: 'idle',
@@ -45,20 +44,7 @@ const speciesSlice = createSlice({
           mammalSpecies: payload.mammalSpecies,
         }
       })
-      .addCase(fetchConservationMeasures.fulfilled, (state, { payload }) => {
-        const { measures, taxonid } = payload
-        const specimenIndex = state.criticalEndangeredSpecies.findIndex(
-          (spec) => spec.taxonid === taxonid
-        )
-        if (specimenIndex > -1) {
-          const critEndSpec = cloneDeep(state.criticalEndangeredSpecies)
-          critEndSpec[specimenIndex].conservation_measures = isEmpty(measures)
-            ? 'No available data'
-            : measures
-          state.criticalEndangeredSpecies = critEndSpec
-        }
-      })
-      .addCase(fetchSpeciesByRegion.rejected, (state, { error }) => {
+      .addCase(fetchSpeciesByRegionAsync.rejected, (state, { error }) => {
         return {
           ...state,
           status: 'failed',

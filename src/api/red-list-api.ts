@@ -10,6 +10,7 @@ import type {
   IGetRegionsListResponse,
   IGetSpeciesByRegionResponse,
 } from '@/types'
+
 import { CancelToken } from 'axios'
 import HttpClient from './http-client'
 

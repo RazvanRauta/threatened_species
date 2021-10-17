@@ -5,13 +5,13 @@
  */
 
 import type { ISpecimen } from '@/types'
-import { useParams } from 'react-router-dom'
-import { FixedSizeList as List } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
-import { useWindowSize } from '@/hooks'
+import { FixedSizeList as List } from 'react-window'
 import Row from '../Row'
 import { createItemData } from '../../utils'
 import { useMediaQuery } from '@mui/material'
+import { useParams } from 'react-router-dom'
+import { useWindowSize } from '@/hooks'
 
 interface ListComponentProps {
   species: ISpecimen[]

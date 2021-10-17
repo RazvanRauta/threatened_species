@@ -1,4 +1,11 @@
+/**
+ *  @author: Razvan Rauta
+ *  Date: Oct 16 2021
+ *  Time: 17:04
+ */
+
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
+
 import { forwardRef } from 'react'
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(

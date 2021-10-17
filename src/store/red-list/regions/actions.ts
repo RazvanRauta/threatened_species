@@ -4,10 +4,10 @@
  * @ Time: 16:15
  */
 
-import RedListApi from '@/api/red-list-api'
 import { IGetRegionsListResponse } from '@/types'
-import { createAsyncThunk } from '@reduxjs/toolkit'
+import RedListApi from '@/api/red-list-api'
 import type { RootState } from '@/store'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 
 export const fetchRegionsAsync = createAsyncThunk<

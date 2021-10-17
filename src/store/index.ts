@@ -4,7 +4,8 @@
  * @ Time: 16:19
  */
 
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
+import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
+
 import regionsReducer from './red-list/regions/regionsSlice'
 import speciesReducer from './red-list/species/speciesSlice'
 

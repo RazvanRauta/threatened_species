@@ -4,15 +4,16 @@
  *  Time: 19:20
  */
 
-import { CardContent, CircularProgress, Box, Typography } from '@mui/material'
+import { Box, CardContent, CircularProgress, Typography } from '@mui/material'
+
+import Paper from '@mui/material/Paper'
+import type { SpecimenDetailsProps } from './index'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import type { SpecimenDetailsProps } from './index'
 
 interface Props extends SpecimenDetailsProps {}
 

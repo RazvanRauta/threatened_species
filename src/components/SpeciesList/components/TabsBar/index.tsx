@@ -5,8 +5,9 @@
  */
 
 import { Box, Typography, useMediaQuery } from '@mui/material'
-import Tabs from '@mui/material/Tabs'
+
 import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
 
 function a11yProps(index: number) {
   return {

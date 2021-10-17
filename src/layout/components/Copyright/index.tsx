@@ -1,3 +1,9 @@
+/**
+ *  @author: Razvan Rauta
+ *  Date: Oct 16 2021
+ *  Time: 17:04
+ */
+
 import { Link, Typography } from '@mui/material'
 
 const Copyright = () => {

@@ -4,16 +4,15 @@
  *  Time: 23:11
  */
 
-import { useAppSelector } from '@/hooks'
-import { useParams } from 'react-router-dom'
-import { useTheme } from '@mui/material/styles'
-import SwipeableViews from 'react-swipeable-views'
-
 import type { ISpecimen } from '@/types'
 import ListComponent from './components/ListComponent'
-import TabsBar from './components/TabsBar'
-import { useState } from 'react'
+import SwipeableViews from 'react-swipeable-views'
 import TabPanel from './components/TabPanel'
+import TabsBar from './components/TabsBar'
+import { useAppSelector } from '@/hooks'
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { useTheme } from '@mui/material/styles'
 
 export type SpeciesListProps = {
   species: ISpecimen[]

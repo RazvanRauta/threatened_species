@@ -4,23 +4,23 @@
  *  Time: 17:44
  */
 
-import type { IRegion } from '@/types'
 import {
   Box,
+  Button,
   Card,
   CardActions,
-  Button,
   CardHeader,
   CardMedia,
 } from '@mui/material'
 import { Theme, styled } from '@mui/material/styles'
-import lowerCase from 'lodash/lowerCase'
-import { Link } from 'react-router-dom'
 
 import Africa from '@/assets/images/africa.svg'
-import Global from '@/assets/images/global.svg'
-import Europe from '@/assets/images/europe.svg'
 import Asia from '@/assets/images/asia.svg'
+import Europe from '@/assets/images/europe.svg'
+import Global from '@/assets/images/global.svg'
+import type { IRegion } from '@/types'
+import { Link } from 'react-router-dom'
+import lowerCase from 'lodash/lowerCase'
 
 const StyledLink = styled(Link)`
   margin: 0;

@@ -4,11 +4,11 @@
  *  Time: 17:15
  */
 
-import { Typography, Box } from '@mui/material'
-import { memo } from 'react'
+import { Box, Typography } from '@mui/material'
+import { ListChildComponentProps, areEqual } from 'react-window'
 
-import { areEqual, ListChildComponentProps } from 'react-window'
 import RowComponent from '../RowComponent'
+import { memo } from 'react'
 
 const Row = memo(({ data, index, style }: ListChildComponentProps) => {
   const { species, region, showCriticalEndangered } = data
