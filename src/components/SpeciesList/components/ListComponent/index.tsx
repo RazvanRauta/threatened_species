@@ -32,7 +32,12 @@ const ListComponent = ({
   const { region } = useParams<{ region?: string }>()
   const isMobile = useMediaQuery('(max-width:600px)')
 
-  const itemCount = hasMoreResults ? species.length + 1 : species.length
+  //To show "No results message"
+  const itemCount = species.length
+    ? hasMoreResults
+      ? species.length + 1
+      : species.length
+    : species.length + 1
   const itemData = createItemData(
     species,
     region,

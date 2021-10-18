@@ -42,9 +42,10 @@ const Row = memo(
           p: '20px',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Typography variant='h4'>No results in this category 😓</Typography>
+        <Typography variant='h4'>No results in this category 😄</Typography>
       </Box>
     )
   },
