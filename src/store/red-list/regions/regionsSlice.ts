@@ -4,13 +4,14 @@
  * @ Time: 16:49
  */
 
-import Region from '@/models/region'
+import { IRegion, ThunkActionStatus } from '@/types'
+
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchRegionsAsync } from './actions'
 
 export interface IRegionsState {
-  regions: Region[]
-  status: 'idle' | 'loading' | 'failed'
+  regions: IRegion[]
+  status: ThunkActionStatus
   error: string | null
 }
 

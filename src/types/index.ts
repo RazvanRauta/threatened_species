@@ -61,6 +61,8 @@ export interface ISpecimen {
   main_common_name: null | string
   conservation_measures?: null | string
   common_name?: null | string
+  common_name_status?: ThunkActionStatus
+  conservation_measures_status?: ThunkActionStatus
 }
 
 export enum Category {
@@ -149,3 +151,5 @@ export interface CommonSpecimenName {
   primary: boolean
   language: string
 }
+
+export type ThunkActionStatus = 'idle' | 'loading' | 'failed' | 'fulfilled'

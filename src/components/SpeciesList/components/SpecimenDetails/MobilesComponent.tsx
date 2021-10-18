@@ -33,7 +33,6 @@ const MobilesComponent = ({
   isEndangered,
   loadingMeasurers,
   specimen,
-  conservationMeasurers,
 }: Props) => {
   return (
     <StyledContent>
@@ -72,7 +71,7 @@ const MobilesComponent = ({
                       textOverflow: 'ellipsis',
                     }}
                   >
-                    {conservationMeasurers}
+                    {specimen.conservation_measures}
                   </Typography>
                 }
                 secondary='Conservation Measures'

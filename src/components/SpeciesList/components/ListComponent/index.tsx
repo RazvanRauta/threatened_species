@@ -4,17 +4,17 @@
  *  Time: 10:13
  */
 
+import { ISpecimen } from '@/types'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { FixedSizeList as List } from 'react-window'
 import Row from '../Row'
-import Specimen from '@/models/specimen'
 import { createItemData } from '../../utils'
 import { useMediaQuery } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useWindowSize } from '@/hooks'
 
 interface ListComponentProps {
-  species: Specimen[]
+  species: ISpecimen[]
   loadMore: () => void
   hasMoreResults: boolean
   showCriticalEndangered?: boolean

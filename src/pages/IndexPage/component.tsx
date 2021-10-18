@@ -8,8 +8,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { useEffect, useState } from 'react'
 
 import { Grid } from '@mui/material'
+import { IRegion } from '@/types'
 import Loader from '@/components/Loader'
-import Region from '@/models/region'
 import RegionCard from '@/components/RegionCard'
 import Snackbar from '@/components/Snackbar'
 import { fetchRegionsAsync } from '@/store/red-list/regions/actions'
@@ -46,7 +46,7 @@ const IndexPageComponent = (props: Props) => {
         <Grid item xs={12}>
           <Grid container justifyContent='center' spacing={2}>
             {regions &&
-              sortBy(regions, 'name').map((region: Region) => (
+              sortBy(regions, 'name').map((region: IRegion) => (
                 <Grid key={region.identifier} item>
                   <RegionCard region={region} />
                 </Grid>

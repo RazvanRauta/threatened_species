@@ -21,7 +21,6 @@ const DesktopComponent = ({
   isEndangered,
   loadingMeasurers,
   specimen,
-  conservationMeasurers,
 }: Props) => {
   return (
     <CardContent>
@@ -68,7 +67,7 @@ const DesktopComponent = ({
                 textOverflow: 'ellipsis',
               }}
             >
-              {conservationMeasurers}
+              {specimen.conservation_measures}
             </Typography>
           )}
         </Box>

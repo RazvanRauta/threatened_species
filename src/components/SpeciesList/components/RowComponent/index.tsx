@@ -12,20 +12,22 @@ import {
   IconButton,
   useMediaQuery,
 } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import axios, { CancelToken } from 'axios'
+import React, { useEffect } from 'react'
+import {
+  fetchCommonNameAsync,
+  fetchConservationMeasurersAsync,
+} from '@/store/red-list/species/actions'
 
+import { ISpecimen } from '@/types'
 import ListLoader from '../ListLoader'
-import RedListApi from '@/api/red-list-api'
-import Specimen from '@/models/specimen'
 import SpecimenDetails from '../SpecimenDetails'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import isEmpty from 'lodash/isEmpty'
-import { useLocalStorage } from '@/hooks'
+import axios from 'axios'
+import { useAppDispatch } from '@/hooks'
 
 interface RowComponentProps {
   style: React.CSSProperties
-  specimen: Specimen
+  specimen: ISpecimen
   loading: boolean
   region?: string
   isEndangered?: boolean
@@ -38,133 +40,41 @@ const RowComponent = ({
   region,
   isEndangered,
 }: RowComponentProps) => {
-  const [loadingMeasurers, setLoadingMeasurers] = useState(false)
-  const [isLoadingName, setIsLoadingName] = useState(false)
-
-  const [measurers, setMeasurers] = useLocalStorage<string>(
-    `ConservationMeasurers`,
-    '{}'
-  )
-  const [commonNames, setCommonNames] = useLocalStorage<string>(
-    `CommonNames`,
-    '{}'
-  )
-
-  const measurersData = JSON.parse(measurers)
-  const commonNamesData = JSON.parse(commonNames)
+  const dispatch = useAppDispatch()
 
   const isMobile = useMediaQuery('(max-width:600px)')
 
   useEffect(() => {
     const CancelToken = axios.CancelToken
     const source = CancelToken.source()
-    if (
-      specimen &&
-      isEndangered &&
-      !measurersData[specimen.taxonid] &&
-      region
-    ) {
-      loadConservationMeasurers(source.token)
+    if (specimen && isEndangered && !specimen.conservation_measures && region) {
+      dispatch(
+        fetchConservationMeasurersAsync({
+          taxonid: specimen.taxonid,
+          region,
+          cancelToken: source.token,
+        })
+      )
     }
-    if (specimen && !commonNamesData[specimen.taxonid]) {
-      loadCommonName(source.token)
+    if (specimen && !specimen.common_name && region) {
+      dispatch(
+        fetchCommonNameAsync({
+          scientificName: specimen.scientific_name,
+          region,
+          taxonid: specimen.taxonid,
+          cancelToken: source.token,
+        })
+      )
     }
     return () => {
       source.cancel(
         `Item ${
           specimen ? specimen.taxonid : 'N/A'
-        } is unmounting. Request to fetch Conservation Measurers was canceled`
+        } is unmounting. Requests to fetch extra details were canceled was canceled`
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [specimen])
-
-  const loadConservationMeasurers = async (cancelToken: CancelToken) => {
-    const defaultMeasures = 'No data available'
-    if (region && specimen) {
-      setLoadingMeasurers(true)
-      const redListApi = new RedListApi()
-      try {
-        const { data } = await redListApi.getConservationMeasuresByIdAndRegion(
-          specimen.taxonid,
-          region,
-          cancelToken
-        )
-        if (data) {
-          const { result } = data
-          const measurersDatum = isEmpty(result)
-            ? defaultMeasures
-            : result.map((mes) => mes.title).join(', ')
-
-          setMeasurers(
-            JSON.stringify({
-              ...measurersData,
-              [specimen.taxonid]: measurersDatum,
-            })
-          )
-        } else {
-          setMeasurers(
-            JSON.stringify({
-              ...measurersData,
-              [specimen.taxonid]: defaultMeasures,
-            })
-          )
-        }
-      } catch (err: any) {
-        console.log(err.message)
-        setMeasurers(
-          JSON.stringify({
-            ...measurersData,
-            [specimen.taxonid]: defaultMeasures,
-          })
-        )
-      } finally {
-        setLoadingMeasurers(false)
-      }
-    }
-  }
-
-  const loadCommonName = async (cancelToken: CancelToken) => {
-    const defaultName = 'Scientific name'
-    if (specimen) {
-      setIsLoadingName(true)
-      const redListApi = new RedListApi()
-      try {
-        const { data } = await redListApi.getCommonNameByName(
-          specimen.scientific_name,
-          cancelToken
-        )
-        if (data) {
-          const { result } = data
-          const nameData = isEmpty(result) ? defaultName : result[0]?.taxonname
-
-          setCommonNames(
-            JSON.stringify({
-              ...commonNamesData,
-              [specimen.taxonid]: nameData,
-            })
-          )
-        } else {
-          setCommonNames(
-            JSON.stringify({
-              ...commonNamesData,
-              [specimen.taxonid]: defaultName,
-            })
-          )
-        }
-      } catch (err: any) {
-        console.log(err.message)
-        setCommonNames(
-          JSON.stringify({
-            ...commonNamesData,
-            [specimen.taxonid]: defaultName,
-          })
-        )
-      } finally {
-        setIsLoadingName(false)
-      }
-    }
-  }
+  }, [])
 
   return loading ? (
     <ListLoader style={style} />
@@ -196,7 +106,7 @@ const RowComponent = ({
           <CardHeader
             title={specimen.scientific_name}
             subheader={
-              isLoadingName ? (
+              specimen.common_name_status === 'loading' ? (
                 <CircularProgress
                   size='20px'
                   color='secondary'
@@ -206,7 +116,7 @@ const RowComponent = ({
                   }}
                 />
               ) : (
-                commonNamesData[specimen.taxonid]
+                specimen.common_name
               )
             }
             sx={{
@@ -227,9 +137,10 @@ const RowComponent = ({
 
           <SpecimenDetails
             isEndangered={isEndangered}
-            loadingMeasurers={loadingMeasurers}
+            loadingMeasurers={
+              specimen.conservation_measures_status === 'loading'
+            }
             specimen={specimen}
-            conservationMeasurers={measurersData[specimen.taxonid]}
             isMobile={isMobile}
           />
         </Card>

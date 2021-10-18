@@ -4,14 +4,14 @@
  * @ Time: 16:15
  */
 
+import { IRegion } from '@/types'
 import RedListApi from '@/api/red-list-api'
-import Region from '@/models/region'
 import type { RootState } from '@/store'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 
 export const fetchRegionsAsync = createAsyncThunk<
-  { regions: Region[]; error?: string },
+  { regions: IRegion[]; error?: string },
   void,
   { state: RootState }
 >(
@@ -26,11 +26,7 @@ export const fetchRegionsAsync = createAsyncThunk<
       }
 
       if (data && !isEmpty(data.results)) {
-        const regionList: Region[] = data.results.map(
-          (regionDetails) =>
-            new Region(regionDetails.name, regionDetails.identifier)
-        )
-
+        const regionList: IRegion[] = data.results
         return {
           regions: regionList,
         }

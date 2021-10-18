@@ -4,10 +4,9 @@
  *  Time: 23:11
  */
 
-import { Category, ClassName } from '@/types'
+import { Category, ClassName, ISpecimen } from '@/types'
 
 import ListComponent from './components/ListComponent'
-import Specimen from '@/models/specimen'
 import SwipeableViews from 'react-swipeable-views'
 import TabPanel from './components/TabPanel'
 import TabsBar from './components/TabsBar'
@@ -17,7 +16,7 @@ import { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 
 export type SpeciesListProps = {
-  species: Specimen[]
+  species: ISpecimen[]
 }
 
 const SpeciesList = ({ species }: SpeciesListProps) => {
@@ -25,8 +24,6 @@ const SpeciesList = ({ species }: SpeciesListProps) => {
   const { region } = useParams<{ region: string }>()
   const [value, setValue] = useState(0)
   const theme = useTheme()
-
-  console.log(species)
 
   const criticalEndangeredSpecies = species
     ? species.filter(({ category }) => category === Category.CR)

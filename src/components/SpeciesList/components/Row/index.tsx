@@ -7,8 +7,8 @@
 import { Box, Typography } from '@mui/material'
 import { ListChildComponentProps, areEqual } from 'react-window'
 
+import { ISpecimen } from '@/types'
 import RowComponent from '../RowComponent'
-import Specimen from '@/models/specimen'
 import { memo } from 'react'
 
 const Row = memo(
@@ -17,7 +17,7 @@ const Row = memo(
     index,
     style,
   }: ListChildComponentProps<{
-    species: Specimen[]
+    species: ISpecimen[]
     region: string | undefined
     showCriticalEndangered: boolean | undefined
   }>) => {

@@ -18,8 +18,8 @@ import Africa from '@/assets/images/africa.svg'
 import Asia from '@/assets/images/asia.svg'
 import Europe from '@/assets/images/europe.svg'
 import Global from '@/assets/images/global.svg'
+import { IRegion } from '@/types'
 import { Link } from 'react-router-dom'
-import Region from '@/models/region'
 import lowerCase from 'lodash/lowerCase'
 
 const StyledLink = styled(Link)`
@@ -30,7 +30,7 @@ const StyledLink = styled(Link)`
 `
 
 interface Props {
-  region: Region
+  region: IRegion
 }
 
 const RegionCard = ({ region }: Props) => {

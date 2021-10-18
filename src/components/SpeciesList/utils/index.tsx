@@ -4,12 +4,12 @@
  *  Time: 17:17
  */
 
-import Specimen from '@/models/specimen'
+import { ISpecimen } from '@/types'
 import memoize from 'memoize-one'
 
 const createItemData = memoize(
   (
-    species: Specimen[],
+    species: ISpecimen[],
     region: string | undefined,
     showCriticalEndangered?: boolean
   ) => ({
