@@ -4,22 +4,27 @@
  * @ Time: 22:29
  */
 
-import type { ISpecimen } from '@/types'
+import type { ISpecimen, ThunkActionStatus } from '@/types'
+
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchSpeciesByRegionAsync } from './actions'
 
 export interface ISpeciesState {
-  species: ISpecimen[]
-  criticalEndangeredSpecies: ISpecimen[]
-  mammalSpecies: ISpecimen[]
-  status: 'idle' | 'loading' | 'failed'
+  allSpecies: Record<
+    string,
+    {
+      criticalEndangeredSpecies: ISpecimen[]
+      mammalSpecies: ISpecimen[]
+      species: ISpecimen[]
+      noMoreResults?: boolean
+    }
+  >
+  status: ThunkActionStatus
   error: string | null
 }
 
 export const initialState: ISpeciesState = {
-  species: [],
-  criticalEndangeredSpecies: [],
-  mammalSpecies: [],
+  allSpecies: {},
   status: 'idle',
   error: null,
 }
@@ -30,29 +35,115 @@ const speciesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSpeciesByRegionAsync.pending, (state) => {
-        state.status = 'loading'
-      })
-      .addCase(fetchSpeciesByRegionAsync.fulfilled, (state, { payload }) => {
-        return {
-          ...state,
-          status: 'idle',
-          error: null,
-          species: payload.result,
-          criticalEndangeredSpecies: payload.criticalEndangeredSpecies,
-          mammalSpecies: payload.mammalSpecies,
+      .addCase(
+        fetchSpeciesByRegionAsync.pending,
+        (
+          state,
+          {
+            meta: {
+              arg: { pageNumber },
+            },
+          }
+        ) => {
+          if (!pageNumber) {
+            state.status = 'loading'
+          }
         }
-      })
-      .addCase(fetchSpeciesByRegionAsync.rejected, (state, { error }) => {
-        return {
-          ...state,
-          status: 'failed',
-          error: error?.message ?? 'Unknown error while fetching species',
-          species: [],
-          criticalEndangeredSpecies: [],
-          mammalSpecies: [],
+      )
+      .addCase(
+        fetchSpeciesByRegionAsync.fulfilled,
+        (
+          state,
+          {
+            payload,
+            meta: {
+              arg: { pageNumber },
+            },
+          }
+        ) => {
+          const allSpecies = { ...state.allSpecies }
+          const {
+            criticalEndangeredSpecies,
+            mammalSpecies,
+            species,
+            region,
+            noMoreResults,
+          } = payload
+
+          if (!pageNumber || !allSpecies[region]) {
+            allSpecies[region] = {
+              criticalEndangeredSpecies,
+              species,
+              mammalSpecies,
+              noMoreResults,
+            }
+
+            return {
+              ...state,
+              status: 'idle',
+              error: null,
+              allSpecies,
+            }
+          }
+          allSpecies[region] = {
+            criticalEndangeredSpecies: [
+              ...allSpecies[region].criticalEndangeredSpecies,
+              ...criticalEndangeredSpecies,
+            ],
+            species: [...allSpecies[region].species, ...species],
+            mammalSpecies: [
+              ...allSpecies[region].mammalSpecies,
+              ...mammalSpecies,
+            ],
+            noMoreResults,
+          }
+          return {
+            ...state,
+            status: 'idle',
+            error: null,
+            allSpecies: { ...state.allSpecies, ...allSpecies },
+          }
         }
-      })
+      )
+      .addCase(
+        fetchSpeciesByRegionAsync.rejected,
+        (
+          state,
+          {
+            error,
+            payload,
+            meta: {
+              arg: { region },
+            },
+          }
+        ) => {
+          const noMoreResults = payload?.noMoreResults
+
+          if (noMoreResults) {
+            state.allSpecies[region].noMoreResults = true
+            return
+          }
+
+          const allSpecies = { ...state.allSpecies }
+          const errorMsg = payload?.error
+
+          allSpecies[region] = {
+            criticalEndangeredSpecies: [],
+            species: [],
+            mammalSpecies: [],
+            noMoreResults: true,
+          }
+          return {
+            ...state,
+            status: 'failed',
+            allSpecies,
+            error:
+              errorMsg ||
+              error.message ||
+              'Unknown error while fetching species',
+          }
+        }
+      )
   },
 })
 

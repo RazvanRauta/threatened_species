@@ -17,11 +17,12 @@ import { fetchSpeciesByRegionAsync } from '@/store/red-list/species/actions'
 
 const RegionsSpeciesComponent = () => {
   const [showSnackbar, setShowSnackbar] = useState(false)
-  const { status, error, species, criticalEndangeredSpecies, mammalSpecies } =
-    useAppSelector((state) => state.species)
+  const { region = '' } = useParams<{ region?: string }>()
+  const [pageNumber, setPageNumber] = useState(0)
+
+  const { status, error, allSpecies } = useAppSelector((state) => state.species)
 
   const history = useHistory()
-  const params = useParams<{ region?: string }>()
 
   const dispatch = useAppDispatch()
 
@@ -34,15 +35,14 @@ const RegionsSpeciesComponent = () => {
   }, [])
 
   useEffect(() => {
-    const { region } = params
     if (region) {
-      dispatch(fetchSpeciesByRegionAsync({ region }))
+      dispatch(fetchSpeciesByRegionAsync({ region, pageNumber }))
     } else {
       history.push(HOME_ROUTE)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [pageNumber])
 
   useEffect(() => {
     if ((status === 'failed' && error) || !!error) {
@@ -50,15 +50,23 @@ const RegionsSpeciesComponent = () => {
     }
   }, [status, error])
 
+  const loadMore = () => {
+    setPageNumber((prev) => prev + 1)
+  }
+
   return (
     <>
       {status === 'loading' ? (
         <Loader />
-      ) : species ? (
+      ) : allSpecies[region] ? (
         <SpeciesList
-          species={species}
-          criticalEndangeredSpecies={criticalEndangeredSpecies}
-          mammalSpecies={mammalSpecies}
+          species={allSpecies[region].species}
+          criticalEndangeredSpecies={
+            allSpecies[region].criticalEndangeredSpecies
+          }
+          mammalSpecies={allSpecies[region].mammalSpecies}
+          loadMore={loadMore}
+          hasMoreResults={!allSpecies[region].noMoreResults}
         />
       ) : null}
       <Snackbar

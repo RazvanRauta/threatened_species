@@ -29,21 +29,23 @@ const StyledLink = styled(Link)`
   color: inherit;
 `
 
-interface Props extends IRegion {}
+interface Props {
+  region: IRegion
+}
 
-const RegionCard = ({ name, identifier }: Props) => {
+const RegionCard = ({ region }: Props) => {
   let imageSrc = ''
 
   switch (true) {
-    case new RegExp(/africa/).test(lowerCase(name)): {
+    case new RegExp(/africa/).test(lowerCase(region.name)): {
       imageSrc = Africa
       break
     }
-    case new RegExp(/europe/).test(lowerCase(name)): {
+    case new RegExp(/europe/).test(lowerCase(region.name)): {
       imageSrc = Europe
       break
     }
-    case new RegExp(/asia/).test(lowerCase(name)): {
+    case new RegExp(/asia/).test(lowerCase(region.name)): {
       imageSrc = Asia
       break
     }
@@ -63,12 +65,12 @@ const RegionCard = ({ name, identifier }: Props) => {
           },
         }}
       >
-        <StyledLink to={`/species/${identifier}`}>
-          <CardHeader title={name} />
+        <StyledLink to={`/species/${region.identifier}`}>
+          <CardHeader title={region.name} />
           <CardMedia
             component='img'
             height='100'
-            alt={name}
+            alt={region.name}
             image={imageSrc}
             sx={{
               '&.MuiCardMedia-img': {

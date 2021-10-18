@@ -11,7 +11,7 @@ import MobilesComponent from './MobilesComponent'
 export interface SpecimenDetailsProps {
   loadingMeasurers: boolean
   specimen: ISpecimen
-  isEndangered: boolean
+  isEndangered?: boolean
   conservationMeasurers?: string
   isMobile: boolean
 }

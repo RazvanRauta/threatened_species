@@ -18,12 +18,16 @@ export type SpeciesListProps = {
   species: ISpecimen[]
   criticalEndangeredSpecies: ISpecimen[]
   mammalSpecies: ISpecimen[]
+  loadMore: () => void
+  hasMoreResults: boolean
 }
 
 const SpeciesList = ({
   species,
   criticalEndangeredSpecies,
   mammalSpecies,
+  loadMore,
+  hasMoreResults,
 }: SpeciesListProps) => {
   const { regions } = useAppSelector((state) => state.regions)
   const { region } = useParams<{ region: string }>()
@@ -57,31 +61,25 @@ const SpeciesList = ({
         <TabPanel value={value} index={0} dir={theme.direction}>
           <ListComponent
             species={species}
-            hasMoreResults={true}
+            hasMoreResults={hasMoreResults}
             defaultRowHeight
-            loadMore={() => {
-              console.log('Loading more')
-            }}
+            loadMore={loadMore}
           />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <ListComponent
             species={criticalEndangeredSpecies}
             showCriticalEndangered
-            hasMoreResults={true}
-            loadMore={() => {
-              console.log('Loading more')
-            }}
+            hasMoreResults={hasMoreResults}
+            loadMore={loadMore}
           />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
           <ListComponent
             species={mammalSpecies}
-            hasMoreResults={true}
+            hasMoreResults={hasMoreResults}
             defaultRowHeight
-            loadMore={() => {
-              console.log('Loading more')
-            }}
+            loadMore={loadMore}
           />
         </TabPanel>
       </SwipeableViews>

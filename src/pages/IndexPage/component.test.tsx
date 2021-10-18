@@ -10,7 +10,7 @@ import {
   renderWithProviders,
 } from '@/utils/testHelpers'
 
-import IndexPageComponent from './component'
+import IndexPageComponent from './IndexPage.component'
 import { REGIONS_LIST_PATH } from '@/api/red-list-api'
 import { rest } from 'msw'
 import { waitFor } from '@testing-library/react'

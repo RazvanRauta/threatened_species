@@ -7,11 +7,29 @@
 import { Category, ClassName, ISpeciesByRegionParams, ISpecimen } from '@/types'
 
 import RedListApi from '@/api/red-list-api'
+import type { RootState } from '@/store'
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import isEmpty from 'lodash/isEmpty'
 
-export const fetchSpeciesByRegionAsync = createAsyncThunk(
+const NO_RESULTS_ERR_MESSAGE = 'No results were found'
+
+export const fetchSpeciesByRegionAsync = createAsyncThunk<
+  {
+    species: ISpecimen[]
+    criticalEndangeredSpecies: ISpecimen[]
+    mammalSpecies: ISpecimen[]
+    region: string
+    error?: string
+    noMoreResults: boolean
+  },
+  ISpeciesByRegionParams,
+  {
+    state: RootState
+    rejectValue: { error: string; region: string; noMoreResults?: boolean }
+  }
+>(
   'species/fetchSpeciesByRegion',
-  async ({ region, pageNumber }: ISpeciesByRegionParams) => {
+  async ({ region, pageNumber }, { rejectWithValue }) => {
     const criticalEndangeredSpecies: ISpecimen[] = []
     const mammalSpecies: ISpecimen[] = []
     const redListApi = new RedListApi()
@@ -23,8 +41,8 @@ export const fetchSpeciesByRegionAsync = createAsyncThunk(
         throw new Error(data.error)
       }
 
-      if (data && data.result) {
-        data?.result?.forEach((specimen) => {
+      if (data && !isEmpty(data.result)) {
+        data.result.forEach((specimen) => {
           if (specimen.category === Category.CR) {
             criticalEndangeredSpecies.push(specimen)
           }
@@ -33,22 +51,31 @@ export const fetchSpeciesByRegionAsync = createAsyncThunk(
           }
         })
 
-        return { ...data, criticalEndangeredSpecies, mammalSpecies }
+        return {
+          species: data.result,
+          criticalEndangeredSpecies,
+          mammalSpecies,
+          region,
+          noMoreResults: false,
+        }
       }
 
-      throw new Error('No results were found')
+      throw new Error(NO_RESULTS_ERR_MESSAGE)
     } catch (error: any) {
       const errorMessage =
-        error.message ?? 'Error while trying to fetch regions list'
+        error.message ?? `Error while trying to fetch species from ${region}`
 
       console.log(errorMessage)
 
-      return {
-        error: errorMessage,
-        result: [],
-        criticalEndangeredSpecies: [],
-        mammalSpecies: [],
+      if (errorMessage === NO_RESULTS_ERR_MESSAGE && pageNumber) {
+        return rejectWithValue({
+          error: errorMessage,
+          region,
+          noMoreResults: true,
+        })
       }
+
+      return rejectWithValue({ error: errorMessage, region })
     }
   }
 )

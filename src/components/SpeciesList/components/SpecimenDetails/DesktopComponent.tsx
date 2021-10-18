@@ -57,7 +57,7 @@ const DesktopComponent = ({
             Conservation Measures:
           </Typography>
           {loadingMeasurers ? (
-            <CircularProgress />
+            <CircularProgress color='secondary' />
           ) : (
             <Typography
               sx={{

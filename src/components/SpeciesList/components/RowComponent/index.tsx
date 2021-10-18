@@ -13,14 +13,13 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import axios, { CancelToken } from 'axios'
+import { loadCommonName, loadConservationMeasurers } from './aditional-requests'
 
 import { ISpecimen } from '@/types'
 import ListLoader from '../ListLoader'
-import RedListApi from '@/api/red-list-api'
 import SpecimenDetails from '../SpecimenDetails'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import isEmpty from 'lodash/isEmpty'
+import axios from 'axios'
 import { useLocalStorage } from '@/hooks'
 
 interface RowComponentProps {
@@ -28,7 +27,7 @@ interface RowComponentProps {
   specimen: ISpecimen
   loading: boolean
   region?: string
-  isEndangered: boolean
+  isEndangered?: boolean
 }
 
 const RowComponent = ({
@@ -40,7 +39,6 @@ const RowComponent = ({
 }: RowComponentProps) => {
   const [loadingMeasurers, setLoadingMeasurers] = useState(false)
   const [isLoadingName, setIsLoadingName] = useState(false)
-
   const [measurers, setMeasurers] = useLocalStorage<string>(
     `ConservationMeasurers`,
     '{}'
@@ -49,9 +47,8 @@ const RowComponent = ({
     `CommonNames`,
     '{}'
   )
-
-  const measurersData = JSON.parse(measurers)
-  const commonNamesData = JSON.parse(commonNames)
+  const measurersData: Record<string, string> = JSON.parse(measurers)
+  const commonNamesData: Record<string, string> = JSON.parse(commonNames)
 
   const isMobile = useMediaQuery('(max-width:600px)')
 
@@ -64,107 +61,33 @@ const RowComponent = ({
       !measurersData[specimen.taxonid] &&
       region
     ) {
-      loadConservationMeasurers(source.token)
+      loadConservationMeasurers({
+        cancelToken: source.token,
+        measurersData,
+        region,
+        setLoadingMeasurers,
+        setMeasurers,
+        specimen,
+      })
     }
     if (specimen && !commonNamesData[specimen.taxonid]) {
-      loadCommonName(source.token)
+      loadCommonName({
+        cancelToken: source.token,
+        commonNamesData,
+        setCommonNames,
+        setIsLoadingName,
+        specimen,
+      })
     }
     return () => {
       source.cancel(
         `Item ${
           specimen ? specimen.taxonid : 'N/A'
-        } is unmounting. Request to fetch Conservation Measurers was canceled`
+        } is unmounting. Requests to fetch extra details were canceled was canceled`
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [specimen])
-
-  const loadConservationMeasurers = async (cancelToken: CancelToken) => {
-    const defaultMeasures = 'No data available'
-    if (region && specimen) {
-      setLoadingMeasurers(true)
-      const redListApi = new RedListApi()
-      try {
-        const { data } = await redListApi.getConservationMeasuresByIdAndRegion(
-          specimen.taxonid,
-          region,
-          cancelToken
-        )
-        if (data) {
-          const { result } = data
-          const measurersDatum = isEmpty(result)
-            ? defaultMeasures
-            : result.map((mes) => mes.title).join(', ')
-
-          setMeasurers(
-            JSON.stringify({
-              ...measurersData,
-              [specimen.taxonid]: measurersDatum,
-            })
-          )
-        } else {
-          setMeasurers(
-            JSON.stringify({
-              ...measurersData,
-              [specimen.taxonid]: defaultMeasures,
-            })
-          )
-        }
-      } catch (err: any) {
-        console.log(err.message)
-        setMeasurers(
-          JSON.stringify({
-            ...measurersData,
-            [specimen.taxonid]: defaultMeasures,
-          })
-        )
-      } finally {
-        setLoadingMeasurers(false)
-      }
-    }
-  }
-
-  const loadCommonName = async (cancelToken: CancelToken) => {
-    const defaultName = 'Scientific name'
-    if (specimen) {
-      setIsLoadingName(true)
-      const redListApi = new RedListApi()
-      try {
-        const { data } = await redListApi.getCommonNameByName(
-          specimen.scientific_name,
-          cancelToken
-        )
-        if (data) {
-          const { result } = data
-          const nameData = isEmpty(result) ? defaultName : result[0]?.taxonname
-
-          setCommonNames(
-            JSON.stringify({
-              ...commonNamesData,
-              [specimen.taxonid]: nameData,
-            })
-          )
-        } else {
-          setCommonNames(
-            JSON.stringify({
-              ...commonNamesData,
-              [specimen.taxonid]: defaultName,
-            })
-          )
-        }
-      } catch (err: any) {
-        console.log(err.message)
-        setCommonNames(
-          JSON.stringify({
-            ...commonNamesData,
-            [specimen.taxonid]: defaultName,
-          })
-        )
-      } finally {
-        setIsLoadingName(false)
-      }
-    }
-  }
 
   return loading ? (
     <ListLoader style={style} />
