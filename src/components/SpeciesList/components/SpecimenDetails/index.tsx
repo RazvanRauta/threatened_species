@@ -5,13 +5,13 @@
  */
 
 import DesktopComponent from './DesktopComponent'
-import type { ISpecimen } from '@/types'
 import MobilesComponent from './MobilesComponent'
+import Specimen from '@/models/specimen'
 
 export interface SpecimenDetailsProps {
   loadingMeasurers: boolean
-  specimen: ISpecimen
-  isEndangered: boolean
+  specimen: Specimen
+  isEndangered?: boolean
   conservationMeasurers?: string
   isMobile: boolean
 }

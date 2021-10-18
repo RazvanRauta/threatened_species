@@ -4,22 +4,20 @@
  * @ Time: 16:49
  */
 
-import type { IRegion } from '@/types'
+import Region from '@/models/region'
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchRegionsAsync } from './actions'
 
 export interface IRegionsState {
-  regions: IRegion[] | []
+  regions: Region[]
   status: 'idle' | 'loading' | 'failed'
   error: string | null
-  count: number | null
 }
 
 export const initialState: IRegionsState = {
   regions: [],
   status: 'idle',
   error: null,
-  count: null,
 }
 
 const regionsSlice = createSlice({
@@ -32,21 +30,11 @@ const regionsSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(fetchRegionsAsync.fulfilled, (state, { payload }) => {
-        if (payload.error) {
-          return {
-            ...state,
-            status: 'failed',
-            error: payload.error,
-            regions: [],
-            count: 0,
-          }
-        }
         return {
           ...state,
           status: 'idle',
           error: null,
-          regions: payload.results,
-          count: payload.count,
+          regions: payload.regions,
         }
       })
       .addCase(fetchRegionsAsync.rejected, (state, { error }) => {
@@ -55,7 +43,6 @@ const regionsSlice = createSlice({
           status: 'failed',
           error: error?.message ?? 'Unknown error',
           regions: [],
-          count: 0,
         }
       })
   },

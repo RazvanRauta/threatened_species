@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 
 import { Grid } from '@mui/material'
 import Loader from '@/components/Loader'
+import Region from '@/models/region'
 import RegionCard from '@/components/RegionCard'
 import Snackbar from '@/components/Snackbar'
 import { fetchRegionsAsync } from '@/store/red-list/regions/actions'
@@ -45,9 +46,9 @@ const IndexPageComponent = (props: Props) => {
         <Grid item xs={12}>
           <Grid container justifyContent='center' spacing={2}>
             {regions &&
-              sortBy(regions, 'name').map(({ identifier, name }) => (
-                <Grid key={identifier} item>
-                  <RegionCard identifier={identifier} name={name} />
+              sortBy(regions, 'name').map((region: Region) => (
+                <Grid key={region.identifier} item>
+                  <RegionCard region={region} />
                 </Grid>
               ))}
           </Grid>

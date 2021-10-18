@@ -4,16 +4,21 @@
  * @ Time: 16:16
  */
 
-import { Category, ClassName, ISpeciesByRegionParams, ISpecimen } from '@/types'
-
+import { ISpeciesByRegionParams } from '@/types'
 import RedListApi from '@/api/red-list-api'
+import { RootState } from '@/store'
+import Specimen from '@/models/specimen'
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import isEmpty from 'lodash/isEmpty'
 
-export const fetchSpeciesByRegionAsync = createAsyncThunk(
+export const fetchSpeciesByRegionAsync = createAsyncThunk<
+  { species: Specimen[]; region: string; error?: string },
+  ISpeciesByRegionParams,
+  { state: RootState; rejectValue: { error: string; region: string } }
+>(
   'species/fetchSpeciesByRegion',
-  async ({ region, pageNumber }: ISpeciesByRegionParams) => {
-    const criticalEndangeredSpecies: ISpecimen[] = []
-    const mammalSpecies: ISpecimen[] = []
+  async ({ region, pageNumber }, { rejectWithValue }) => {
+    let speciesList: Specimen[] = []
     const redListApi = new RedListApi()
 
     try {
@@ -23,17 +28,22 @@ export const fetchSpeciesByRegionAsync = createAsyncThunk(
         throw new Error(data.error)
       }
 
-      if (data && data.result) {
-        data?.result?.forEach((specimen) => {
-          if (specimen.category === Category.CR) {
-            criticalEndangeredSpecies.push(specimen)
-          }
-          if (specimen.class_name === ClassName.Mammalia) {
-            mammalSpecies.push(specimen)
-          }
-        })
+      if (data && !isEmpty(data.result)) {
+        speciesList = data.result.map(
+          (specimenDetails) =>
+            new Specimen(
+              specimenDetails.taxonid,
+              specimenDetails.kingdom_name,
+              specimenDetails.phylum_name,
+              specimenDetails.class_name,
+              specimenDetails.order_name,
+              specimenDetails.family_name,
+              specimenDetails.scientific_name,
+              specimenDetails.category
+            )
+        )
 
-        return { ...data, criticalEndangeredSpecies, mammalSpecies }
+        return { species: speciesList, region }
       }
 
       throw new Error('No results were found')
@@ -43,12 +53,7 @@ export const fetchSpeciesByRegionAsync = createAsyncThunk(
 
       console.log(errorMessage)
 
-      return {
-        error: errorMessage,
-        result: [],
-        criticalEndangeredSpecies: [],
-        mammalSpecies: [],
-      }
+      return rejectWithValue({ error: errorMessage, region })
     }
   }
 )

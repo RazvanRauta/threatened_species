@@ -4,22 +4,18 @@
  * @ Time: 22:29
  */
 
-import type { ISpecimen } from '@/types'
+import Specimen from '@/models/specimen'
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchSpeciesByRegionAsync } from './actions'
 
 export interface ISpeciesState {
-  species: ISpecimen[]
-  criticalEndangeredSpecies: ISpecimen[]
-  mammalSpecies: ISpecimen[]
+  allSpecies: Record<string, Specimen[]>
   status: 'idle' | 'loading' | 'failed'
   error: string | null
 }
 
 export const initialState: ISpeciesState = {
-  species: [],
-  criticalEndangeredSpecies: [],
-  mammalSpecies: [],
+  allSpecies: {},
   status: 'idle',
   error: null,
 }
@@ -34,25 +30,38 @@ const speciesSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(fetchSpeciesByRegionAsync.fulfilled, (state, { payload }) => {
+        const allSpecies = { ...state.allSpecies }
+        allSpecies[payload.region] = [...payload.species]
         return {
           ...state,
           status: 'idle',
           error: null,
-          species: payload.result,
-          criticalEndangeredSpecies: payload.criticalEndangeredSpecies,
-          mammalSpecies: payload.mammalSpecies,
+          allSpecies,
         }
       })
-      .addCase(fetchSpeciesByRegionAsync.rejected, (state, { error }) => {
-        return {
-          ...state,
-          status: 'failed',
-          error: error?.message ?? 'Unknown error while fetching species',
-          species: [],
-          criticalEndangeredSpecies: [],
-          mammalSpecies: [],
+      .addCase(
+        fetchSpeciesByRegionAsync.rejected,
+        (state, { error, payload }) => {
+          const allSpecies = { ...state.allSpecies }
+          if (payload) {
+            allSpecies[payload.region] = []
+            return {
+              ...state,
+              status: 'failed',
+              allSpecies,
+              error:
+                payload.error ||
+                error.message ||
+                'Unknown error while fetching species',
+            }
+          }
+          return {
+            ...state,
+            status: 'failed',
+            error: error?.message ?? 'Unknown error while fetching species',
+          }
         }
-      })
+      )
   },
 })
 

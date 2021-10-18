@@ -17,11 +17,10 @@ import { fetchSpeciesByRegionAsync } from '@/store/red-list/species/actions'
 
 const RegionsSpeciesComponent = () => {
   const [showSnackbar, setShowSnackbar] = useState(false)
-  const { status, error, species, criticalEndangeredSpecies, mammalSpecies } =
-    useAppSelector((state) => state.species)
+  const { status, error, allSpecies } = useAppSelector((state) => state.species)
 
   const history = useHistory()
-  const params = useParams<{ region?: string }>()
+  const { region = '' } = useParams<{ region?: string }>()
 
   const dispatch = useAppDispatch()
 
@@ -34,15 +33,13 @@ const RegionsSpeciesComponent = () => {
   }, [])
 
   useEffect(() => {
-    const { region } = params
     if (region) {
       dispatch(fetchSpeciesByRegionAsync({ region }))
     } else {
       history.push(HOME_ROUTE)
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [region])
 
   useEffect(() => {
     if ((status === 'failed' && error) || !!error) {
@@ -54,12 +51,8 @@ const RegionsSpeciesComponent = () => {
     <>
       {status === 'loading' ? (
         <Loader />
-      ) : species ? (
-        <SpeciesList
-          species={species}
-          criticalEndangeredSpecies={criticalEndangeredSpecies}
-          mammalSpecies={mammalSpecies}
-        />
+      ) : allSpecies[region] ? (
+        <SpeciesList species={allSpecies[region]} />
       ) : null}
       <Snackbar
         message={error ?? 'Unknown error occurred'}

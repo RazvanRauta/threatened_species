@@ -60,6 +60,7 @@ export interface ISpecimen {
   category: Category
   main_common_name: null | string
   conservation_measures?: null | string
+  common_name?: null | string
 }
 
 export enum Category {

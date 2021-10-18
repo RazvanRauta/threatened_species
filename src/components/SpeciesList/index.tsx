@@ -4,8 +4,10 @@
  *  Time: 23:11
  */
 
-import type { ISpecimen } from '@/types'
+import { Category, ClassName } from '@/types'
+
 import ListComponent from './components/ListComponent'
+import Specimen from '@/models/specimen'
 import SwipeableViews from 'react-swipeable-views'
 import TabPanel from './components/TabPanel'
 import TabsBar from './components/TabsBar'
@@ -15,20 +17,24 @@ import { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 
 export type SpeciesListProps = {
-  species: ISpecimen[]
-  criticalEndangeredSpecies: ISpecimen[]
-  mammalSpecies: ISpecimen[]
+  species: Specimen[]
 }
 
-const SpeciesList = ({
-  species,
-  criticalEndangeredSpecies,
-  mammalSpecies,
-}: SpeciesListProps) => {
+const SpeciesList = ({ species }: SpeciesListProps) => {
   const { regions } = useAppSelector((state) => state.regions)
   const { region } = useParams<{ region: string }>()
   const [value, setValue] = useState(0)
   const theme = useTheme()
+
+  console.log(species)
+
+  const criticalEndangeredSpecies = species
+    ? species.filter(({ category }) => category === Category.CR)
+    : []
+
+  const mammalSpecies = species
+    ? species.filter(({ class_name }) => class_name === ClassName.Mammalia)
+    : []
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)

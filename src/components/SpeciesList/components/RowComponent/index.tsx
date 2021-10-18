@@ -15,9 +15,9 @@ import {
 import React, { useEffect, useState } from 'react'
 import axios, { CancelToken } from 'axios'
 
-import { ISpecimen } from '@/types'
 import ListLoader from '../ListLoader'
 import RedListApi from '@/api/red-list-api'
+import Specimen from '@/models/specimen'
 import SpecimenDetails from '../SpecimenDetails'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import isEmpty from 'lodash/isEmpty'
@@ -25,10 +25,10 @@ import { useLocalStorage } from '@/hooks'
 
 interface RowComponentProps {
   style: React.CSSProperties
-  specimen: ISpecimen
+  specimen: Specimen
   loading: boolean
   region?: string
-  isEndangered: boolean
+  isEndangered?: boolean
 }
 
 const RowComponent = ({
