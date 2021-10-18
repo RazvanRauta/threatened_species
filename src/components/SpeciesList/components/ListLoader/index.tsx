@@ -23,7 +23,7 @@ const ListLoader = ({ style }: ListLoaderProps) => (
         height: '100%',
       }}
     >
-      <CircularProgress size='50px' />
+      <CircularProgress size='50px' color='secondary' />
     </Box>
   </div>
 )
