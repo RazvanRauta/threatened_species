@@ -11,11 +11,13 @@ const createItemData = memoize(
   (
     species: ISpecimen[],
     region: string | undefined,
+    hasMoreResults: boolean,
     showCriticalEndangered?: boolean
   ) => ({
     species,
     region,
     showCriticalEndangered,
+    hasMoreResults,
   })
 )
 

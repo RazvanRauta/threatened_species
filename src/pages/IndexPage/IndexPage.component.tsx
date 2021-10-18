@@ -14,9 +14,7 @@ import Snackbar from '@/components/Snackbar'
 import { fetchRegionsAsync } from '@/store/red-list/regions/actions'
 import sortBy from 'lodash/sortBy'
 
-interface Props {}
-
-const IndexPageComponent = (props: Props) => {
+const IndexPageComponent = () => {
   const [showSnackbar, setShowSnackbar] = useState(false)
   const { status, error, regions } = useAppSelector((state) => state.regions)
   const dispatch = useAppDispatch()
@@ -45,9 +43,9 @@ const IndexPageComponent = (props: Props) => {
         <Grid item xs={12}>
           <Grid container justifyContent='center' spacing={2}>
             {regions &&
-              sortBy(regions, 'name').map(({ identifier, name }) => (
-                <Grid key={identifier} item>
-                  <RegionCard identifier={identifier} name={name} />
+              sortBy(regions, 'name').map((region) => (
+                <Grid key={region.identifier} item>
+                  <RegionCard region={region} />
                 </Grid>
               ))}
           </Grid>

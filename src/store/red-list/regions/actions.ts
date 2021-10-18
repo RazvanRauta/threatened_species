@@ -4,34 +4,39 @@
  * @ Time: 16:15
  */
 
-import { IGetRegionsListResponse } from '@/types'
+import type { IRegion } from '@/types'
 import RedListApi from '@/api/red-list-api'
 import type { RootState } from '@/store'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 
 export const fetchRegionsAsync = createAsyncThunk<
-  IGetRegionsListResponse,
+  { regions: IRegion[]; error?: string },
   void,
-  { state: RootState }
+  { state: RootState; rejectValue: { error: string } }
 >(
   'regions/fetchRegions',
-  async () => {
+  async (_, { rejectWithValue }) => {
     const redListApi = new RedListApi()
     try {
-      const response = await redListApi.getRegionsList()
-      return response.data
+      const { data } = await redListApi.getRegionsList()
+
+      if (data && data.error) {
+        throw new Error(data.error)
+      }
+
+      if (data && !isEmpty(data.results)) {
+        const regionList: IRegion[] = data.results
+        return {
+          regions: regionList,
+        }
+      }
+      throw new Error('No results were found')
     } catch (error: any) {
       const errorMessage =
         error.message ?? 'Error while trying to fetch regions list'
-
       console.log(errorMessage)
-
-      return {
-        count: 0,
-        results: [],
-        error: errorMessage,
-      }
+      return rejectWithValue({ error: errorMessage })
     }
   },
   {

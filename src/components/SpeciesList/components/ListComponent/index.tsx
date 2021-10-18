@@ -33,7 +33,12 @@ const ListComponent = ({
   const isMobile = useMediaQuery('(max-width:600px)')
 
   const itemCount = hasMoreResults ? species.length + 1 : species.length
-  const itemData = createItemData(species, region, showCriticalEndangered)
+  const itemData = createItemData(
+    species,
+    region,
+    hasMoreResults,
+    showCriticalEndangered
+  )
 
   return (
     <InfiniteLoader

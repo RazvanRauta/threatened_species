@@ -28,7 +28,7 @@ interface RowComponentProps {
   specimen: ISpecimen
   loading: boolean
   region?: string
-  isEndangered: boolean
+  isEndangered?: boolean
 }
 
 const RowComponent = ({
@@ -73,7 +73,7 @@ const RowComponent = ({
       source.cancel(
         `Item ${
           specimen ? specimen.taxonid : 'N/A'
-        } is unmounting. Request to fetch Conservation Measurers was canceled`
+        } is unmounting. Requests to fetch extra details were canceled was canceled`
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

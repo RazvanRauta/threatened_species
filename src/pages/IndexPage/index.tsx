@@ -8,7 +8,7 @@ import React, { Suspense, lazy } from 'react'
 
 import Loader from '@/components/Loader'
 
-const LazyIndexPage = lazy(() => import('./component'))
+const LazyIndexPage = lazy(() => import('./IndexPage.component'))
 
 const IndexPage = (
   props: JSX.IntrinsicAttributes & { children?: React.ReactNode }

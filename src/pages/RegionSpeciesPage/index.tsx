@@ -8,7 +8,7 @@ import React, { Suspense, lazy } from 'react'
 
 import Loader from '@/components/Loader'
 
-const LazyRegionSpeciesPage = lazy(() => import('./component'))
+const LazyRegionSpeciesPage = lazy(() => import('./RegionsSpecies.component'))
 
 const RegionSpeciesPage = (
   props: JSX.IntrinsicAttributes & { children?: React.ReactNode }

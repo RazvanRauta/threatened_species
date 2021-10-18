@@ -148,3 +148,5 @@ export interface CommonSpecimenName {
   primary: boolean
   language: string
 }
+
+export type ThunkActionStatus = 'idle' | 'loading' | 'failed' | 'fulfilled'
