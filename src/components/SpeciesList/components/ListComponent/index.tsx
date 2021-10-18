@@ -33,7 +33,11 @@ const ListComponent = ({
   const isMobile = useMediaQuery('(max-width:600px)')
 
   //To show "No results message"
-  const itemCount = species.length + 1
+  const itemCount = species.length
+    ? hasMoreResults
+      ? species.length + 1
+      : species.length
+    : species.length + 1
   const itemData = createItemData(
     species,
     region,
