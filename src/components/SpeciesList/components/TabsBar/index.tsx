@@ -58,9 +58,17 @@ const TabsBar = ({ handleChange, value, currentRegion }: TabsBarProps) => {
         aria-label='full width tabs'
         variant='scrollable'
       >
-        <Tab label='All Species' {...a11yProps(0)} />
-        <Tab label='Critical Endangered' {...a11yProps(0)} />
-        <Tab label='Mammals' {...a11yProps(0)} />
+        <Tab
+          label='All Species'
+          data-testid='tab-all-species'
+          {...a11yProps(0)}
+        />
+        <Tab
+          label='Critical Endangered'
+          data-testid='tab-cr'
+          {...a11yProps(0)}
+        />
+        <Tab label='Mammals' data-testid='tab-mammals' {...a11yProps(0)} />
       </Tabs>
     </Box>
   )
