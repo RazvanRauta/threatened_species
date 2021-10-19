@@ -4,29 +4,15 @@
  *  Time: 13:32
  */
 
-import {
-  mockServer,
-  mockedRegionsResponse,
-  renderWithProviders,
-} from '@/utils/testHelpers'
+import { mockServer, renderWithProviders } from '@/utils/testHelpers'
 
 import IndexPageComponent from './IndexPage.component'
 import { REGIONS_LIST_PATH } from '@/api/red-list-api'
+import { mockedRegionsResponse } from '@/utils/mocks'
 import { rest } from 'msw'
 import { waitFor } from '@testing-library/react'
 
 describe('Testing index page', () => {
-  beforeAll(() => {
-    mockServer.listen()
-  })
-
-  afterEach(() => {
-    mockServer.resetHandlers()
-    jest.clearAllMocks()
-  })
-
-  afterAll(() => mockServer.close())
-
   it('should updated store and render index page', async () => {
     mockServer.use(
       ...[

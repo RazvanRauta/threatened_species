@@ -127,7 +127,7 @@ export interface IConservationMeasure {
 }
 
 export interface IGetConservationMeasuresResponse {
-  name: string
+  id: string
   region_identifier: string
   result: IConservationMeasure[]
   error?: string

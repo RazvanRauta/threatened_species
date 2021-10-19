@@ -11,7 +11,6 @@ import speciesReducer, {
   initialState as speciesInitialState,
 } from '@/store/red-list/species/speciesSlice'
 
-import { IGetRegionsListResponse } from '@/types'
 import Layout from '@/layout'
 import { MemoryRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
@@ -55,16 +54,6 @@ export const renderWithProviders = (
     ...render(ui, { wrapper: Wrapper, ...renderOptions }),
     mockStore: store,
   }
-}
-
-export const mockedRegionsResponse: IGetRegionsListResponse = {
-  count: 1,
-  results: [
-    {
-      identifier: 'europe',
-      name: 'Europe',
-    },
-  ],
 }
 
 export const mockServer = setupServer()
